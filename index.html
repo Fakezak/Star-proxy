@@ -1,146 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>VIP Proxy Dashboard</title>
-    <style>
-        /* Reset */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VIP Proxy Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        /* Body */
-        body { height:100vh; display:flex; justify-content:center; align-items:center;
-               background: linear-gradient(135deg,#1a001a,#3d003d); color:#fff; overflow:hidden; }
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0d0d0d, #1a1a1a, #000000);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
 
-        /* Container */
-        .container {
-            background: rgba(0,0,0,0.85); border:2px solid #ff0000; border-radius:15px;
-            padding:40px 50px; width:450px; text-align:center;
-            box-shadow:0 0 25px #ff0000,0 0 50px #ff0000 inset; animation: glow 2s infinite alternate;
-        }
+    .container {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(20, 20, 20, 0.95);
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(255, 0, 150, 0.7);
+      text-align: center;
+    }
 
-        h1 { font-size:30px; margin-bottom:25px; text-shadow:0 0 10px #ff0000,0 0 25px #ff0000; }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #ff0096;
+    }
 
-        input[type="text"] {
-            width:85%; padding:12px 15px; margin-bottom:20px; border-radius:12px;
-            border:2px solid #ff0000; background:rgba(255,255,255,0.05); color:#fff;
-            text-align:center; font-size:16px; outline:none; transition:0.3s;
-        }
-        input[type="text"]:focus { box-shadow:0 0 18px #ff0000; border-color:#ff0000; }
+    label {
+      font-size: 14px;
+      display: block;
+      margin-bottom: 8px;
+      text-align: left;
+      color: #bbb;
+    }
 
-        button {
-            padding:12px 30px; font-size:16px; font-weight:bold; border:none; border-radius:12px;
-            background:#ff0000; color:#fff; cursor:pointer; box-shadow:0 0 12px #ff0000,0 0 25px #ff0000 inset;
-            transition:0.3s; margin-top:10px;
-        }
-        button:hover { background:#ff4d4d; box-shadow:0 0 20px #ff4d4d,0 0 35px #ff4d4d inset; }
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 20px;
+      font-size: 14px;
+      outline: none;
+    }
 
-        #status,#timer { margin-top:15px; font-size:16px; text-shadow:0 0 8px #ff0000; }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #ff0096;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-bottom: 15px;
+    }
 
-        #proxyInfo {
-            margin-top:25px; padding:15px; background:rgba(255,0,0,0.05);
-            border:1px solid #ff0000; border-radius:12px; box-shadow:0 0 10px #ff0000 inset;
-            display:none;
-        }
-        #proxyInfo p { margin:8px 0; font-size:16px; text-shadow:0 0 6px #ff0000; }
+    button:hover {
+      background: #e60082;
+      box-shadow: 0 0 12px #ff0096;
+    }
 
-        @keyframes glow {
-            0% { box-shadow:0 0 25px #ff0000,0 0 50px #ff0000 inset; }
-            50% { box-shadow:0 0 35px #ff4d4d,0 0 60px #ff4d4d inset; }
-            100% { box-shadow:0 0 25px #ff0000,0 0 50px #ff0000 inset; }
-        }
-    </style>
+    .proxy-info {
+      margin-top: 20px;
+      padding: 12px;
+      background: #111;
+      border-radius: 10px;
+      font-size: 14px;
+      word-break: break-word;
+      color: #ffccff;
+      display: none; /* Hidden until backend connects */
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>VIP Proxy Dashboard</h1>
-        <input type="text" id="uid" placeholder="Enter your Free Fire UID">
-        <button id="registerBtn">Save & Activate</button>
+  <div class="container">
+    <h1>VIP Proxy Dashboard</h1>
+    <label for="uid">Enter your Free Fire UID</label>
+    <input type="text" id="uid" placeholder="Enter UID">
+    <button id="saveBtn">Save UID</button>
+    <button id="proxyBtn">Show Proxy IP</button>
 
-        <p id="status"></p>
-        <p id="timer"></p>
-
-        <div id="proxyInfo">
-            <p>Proxy IP: <span id="proxyIP"></span></p>
-            <p>Port: <span id="proxyPort"></span></p>
-            <button id="connectProxyBtn">Connect to Proxy</button>
-        </div>
+    <div class="proxy-info" id="proxyInfo">
+      Proxy IP: <span>waiting for backend…</span><br>
+      Port: <span>waiting for backend…</span>
     </div>
-
-    <script>
-        const registerBtn = document.getElementById('registerBtn');
-        const statusEl = document.getElementById('status');
-        const timerEl = document.getElementById('timer');
-        const proxyDiv = document.getElementById('proxyInfo');
-        const proxyIPEl = document.getElementById('proxyIP');
-        const proxyPortEl = document.getElementById('proxyPort');
-        const connectBtn = document.getElementById('connectProxyBtn');
-
-        let interval;
-        const proxyIP = "127.0.0.1";
-        const proxyPort = "4000";
-
-        registerBtn.addEventListener('click', async () => {
-            const uid = document.getElementById('uid').value.trim();
-            if(!uid) return alert('Enter UID');
-
-            try {
-                const res = await fetch('https://your-backend-url.onrailway.app/register',{
-                    method:'POST',
-                    headers:{'Content-Type':'application/json'},
-                    body:JSON.stringify({uid})
-                });
-                const data = await res.json();
-                if(data.success){
-                    statusEl.textContent = `UID unlocked! Proxy active.`;
-                    proxyDiv.style.display = 'block';
-                    proxyIPEl.textContent = proxyIP;
-                    proxyPortEl.textContent = proxyPort;
-                    startTimer(data.expires);
-                }else{
-                    alert('Failed to unlock UID.');
-                }
-            } catch(err){ console.error(err); alert('Error connecting to backend.'); }
-        });
-
-        function startTimer(expireTime){
-            clearInterval(interval);
-            interval = setInterval(()=>{
-                const now = Date.now();
-                const remaining = expireTime - now;
-                if(remaining<=0){
-                    timerEl.textContent='Session expired. UID locked.';
-                    statusEl.textContent='';
-                    proxyDiv.style.display='none';
-                    clearInterval(interval);
-                    return;
-                }
-                const hrs=Math.floor(remaining/(1000*60*60));
-                const mins=Math.floor((remaining%(1000*60*60))/(1000*60));
-                const secs=Math.floor((remaining%(1000*60))/1000);
-                timerEl.textContent=`Time remaining: ${hrs}h ${mins}m ${secs}s`;
-            },1000);
-        }
-
-        connectBtn.addEventListener('click', async ()=>{
-            const uid=document.getElementById('uid').value.trim();
-            if(!uid) return alert('Enter UID');
-
-            try{
-                const res = await fetch(`https://your-backend-url.onrailway.app/proxy/${uid}`);
-                const data = await res.json();
-                if(res.status===200){
-                    alert(
-                        `Connected to proxy!\n\nFake VIP Items Activated:\n`+
-                        `Skins: ${data.skins}\n`+
-                        `Diamonds: ${data.diamonds}\n`+
-                        `Gold: ${data.gold}\n`+
-                        `Emotes: ${data.emotes}\n`+
-                        `V-Badge: ${data.v_badge}\n`+
-                        `Mailbox: ${data.mailbox}`
-                    );
-                }else{ alert(data.error); }
-            }catch(err){ console.error(err); alert('Failed to connect to proxy.'); }
-        });
-    </script>
+  </div>
 </body>
-      </html>
+</html>
