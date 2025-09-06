@@ -5,61 +5,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VIP Proxy Dashboard</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: Arial, sans-serif;
       background: linear-gradient(135deg, #0d0d0d, #1a1a1a, #000000);
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      flex-direction: column;
+      color: #fff; display: flex; justify-content: center;
+      align-items: center; height: 100vh; flex-direction: column;
     }
-
     .container {
-      width: 100%;
-      max-width: 420px;
+      width: 100%; max-width: 420px;
       background: rgba(20, 20, 20, 0.95);
-      padding: 25px;
-      border-radius: 15px;
+      padding: 25px; border-radius: 15px;
       box-shadow: 0 0 20px rgba(255, 0, 150, 0.7);
       text-align: center;
     }
-
-    h1 {
-      font-size: 24px;
-      margin-bottom: 20px;
-      color: #ff0096;
-    }
-
-    label {
-      font-size: 14px;
-      display: block;
-      margin-bottom: 8px;
-      text-align: left;
-      color: #bbb;
-    }
-
+    h1 { font-size: 24px; margin-bottom: 20px; color: #ff0096; }
+    label { font-size: 14px; display: block; margin-bottom: 8px; text-align: left; color: #bbb; }
     input {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      margin-bottom: 20px;
-      font-size: 14px;
-      outline: none;
+      width: 100%; padding: 10px; border-radius: 8px;
+      border: none; margin-bottom: 20px; font-size: 14px; outline: none;
     }
-
     button {
-      width: 100%;
-      padding: 12px;
-      background: #ff0096;
+      width: 100%; padding: 12px; background: #ff0096;
+      border: none; border-radius: 10px; font-size: 16px; font-weight: bold;
+      color: #fff; cursor: pointer; transition: 0.3s; margin-bottom: 15px;
+    }
+    button:hover { background: #e60082; box-shadow: 0 0 12px #ff0096; }
+    .proxy-info {
+      margin-top: 20px; padding: 12px; background: #111;
+      border-radius: 10px; font-size: 14px; word-break: break-word;
+      color: #ffccff; display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>VIP Proxy Dashboard</h1>
+    <label for="uid">Enter your Free Fire UID</label>
+    <input type="text" id="uid" placeholder="Enter UID">
+    <button id="saveBtn">Save UID</button>
+    <button id="proxyBtn">Show Proxy IP</button>
+
+    <div class="proxy-info" id="proxyInfo">
+      Proxy IP: <span>waiting…</span><br>
+      Port: <span>waiting…</span>
+    </div>
+  </div>
+  <script src="frontend.js"></script>
+</body>
+</html>      background: #ff0096;
       border: none;
       border-radius: 10px;
       font-size: 16px;
