@@ -6,10 +6,10 @@ const saveBtn = document.getElementById("saveBtn");
 const proxyBtn = document.getElementById("proxyBtn");
 const proxyInfo = document.getElementById("proxyInfo");
 
-// Backend API base URL (update with Railway deploy URL later)
-const API_BASE = "http://localhost:4000";
+// Backend API (your Railway URL)
+const API_BASE = "https://star-proxy-production.up.railway.app";
 
-// Save UID function
+// Save UID
 saveBtn.addEventListener("click", async () => {
   const uid = uidInput.value.trim();
   if (!uid) {
@@ -21,7 +21,7 @@ saveBtn.addEventListener("click", async () => {
     const res = await fetch(`${API_BASE}/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ uid })
+      body: JSON.stringify({ uid }),
     });
 
     const data = await res.json();
@@ -36,7 +36,7 @@ saveBtn.addEventListener("click", async () => {
   }
 });
 
-// Show Proxy IP function
+// Show Proxy IP
 proxyBtn.addEventListener("click", async () => {
   const uid = uidInput.value.trim();
   if (!uid) {
@@ -53,7 +53,7 @@ proxyBtn.addEventListener("click", async () => {
       return;
     }
 
-    // Example fake IP + Port (backend can randomize these)
+    // Example fake IP + Port (backend could randomize)
     const fakeIP = "192.168.1.77";
     const fakePort = "8080";
 
